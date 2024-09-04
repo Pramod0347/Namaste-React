@@ -1,15 +1,18 @@
 import { restaurantList } from "../config";
 import RestuarantCard from "./RestaurantCard";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Shimmer from "./Shimmer";
 
 function filterData(searchText, restaurants) {
-    return restaurants.filter((restaurant) => restaurant?.info?.name?.toLowerCase()?.includes(searchText.toLowerCase()));
+  return restaurants.filter((restaurant) =>
+    restaurant?.info?.name?.toLowerCase()?.includes(searchText.toLowerCase())
+  );
 }
 
 const Body = () => {
   // searchText is a local state variable
-  const [allRestaurants, setAllRestaurants] = useState([])
+  const [allRestaurants, setAllRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchText, setSearchText] = useState(); // to create state variable
 
@@ -18,20 +21,24 @@ const Body = () => {
   }, []);
 
   async function getRestaurants() {
-    const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.99740&lng=79.00110&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING");
+    const data = await fetch(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.99740&lng=79.00110&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+    );
     const json = await data.json();
     console.log(json);
-    setAllRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
-    setFilteredRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
-
+    setAllRestaurants(
+      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    );
+    setFilteredRestaurants(
+      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    );
   }
 
-  if(!allRestaurants) return null;
+  if (!allRestaurants) return null;
 
-  if(filteredRestaurants?.length === 0)
-    return <h1>No Matches found!!</h1>
-
-  return filteredRestaurants.length === 0 ? <Shimmer /> : (
+  return allRestaurants?.length === 0 ? (
+    <Shimmer />
+  ) : (
     <>
       <div className="search-container">
         <input
@@ -56,11 +63,20 @@ const Body = () => {
         </button>
       </div>
       <div className="restaurant-list">
-        {filteredRestaurants.map((restaurant) => {
-          return (
-            <RestuarantCard {...restaurant.info} key={restaurant.info.id} />
-          );
-        })}
+        {filteredRestaurants?.length === 0 ? (
+          <h1>No Matches found!!</h1>
+        ) : (
+          filteredRestaurants.map((restaurant) => {
+            return (
+              <Link
+                to={"/restaurantDetails/" + restaurant.info.id}
+                key={restaurant.info.id}
+              >
+                <RestuarantCard {...restaurant.info} />
+              </Link>
+            );
+          })
+        )}
       </div>
     </>
   );
