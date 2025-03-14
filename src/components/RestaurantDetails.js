@@ -1,23 +1,15 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Shimmer from "./Shimmer";
 import { IMG_CDN_URL } from "../config";
+import useRestaurant from "../utils/useRestaurant";
 
 const RestaurantDetails = () => {
     const { id } = useParams();
+    console.log('Pramod 0', id);
+    
+    const restaurant = useRestaurant(id);
 
-    const [restaurant, setRestaurant] = useState(null);
-
-    useEffect(() => {
-        getRestaurantInfo();
-    }, [])
-
-    async function getRestaurantInfo() {
-        const data = await fetch("https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=21.99740&lng=79.00110&restaurantId=" + id);
-        const json = await data.json();
-        setRestaurant(json.data);
-        console.log('restaurantInfo', json.data.cards[2]);
-    }
+    console.log('Pramod', id);
 
     return (!restaurant) ? <Shimmer/> : (
         <div>
@@ -25,8 +17,9 @@ const RestaurantDetails = () => {
             <p>Restaurant id: { id } </p>
 
             {/* {console.log(restaurant.cards[2].card.card.info.name)} */}
-            <p>Restaurant Name: { restaurant.cards[2].card.card.info.name }</p>
-            <img src={IMG_CDN_URL + restaurant.cards[2].card.card.info.cloudinaryImageId}></img>
+            <p>Restaurant Name: { restaurant?.cards[2]?.card?.card?.info?.name }</p>
+            <img src={IMG_CDN_URL + restaurant?.cards[2]?.card?.card?.info?.cloudinaryImageId}></img>
+            <h3>{restaurant?.cards[2]?.card?.card?.info?.costForTwoMessage}</h3>
         </div>
     );
 };

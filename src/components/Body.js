@@ -1,24 +1,25 @@
-import { restaurantList } from "../config";
 import RestuarantCard from "./RestaurantCard";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Shimmer from "./Shimmer";
+import { filterData } from "../utils/helper";
+import useOnline from "../utils/useOnline";
 
-function filterData(searchText, restaurants) {
-  return restaurants.filter((restaurant) =>
-    restaurant?.info?.name?.toLowerCase()?.includes(searchText.toLowerCase())
-  );
-}
 
 const Body = () => {
   // searchText is a local state variable
   const [allRestaurants, setAllRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-  const [searchText, setSearchText] = useState(); // to create state variable
+  const [searchText, setSearchText] = useState();
 
   useEffect(() => {
     getRestaurants();
   }, []);
+
+  // const isOnline = useOnline();
+  // if (!isOnline) {
+  //   return <h1>🔴 Offline, please check your internet connection!!</h1>;
+  // }
 
   async function getRestaurants() {
     const data = await fetch(
