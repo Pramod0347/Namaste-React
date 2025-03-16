@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Logo from "../assets/img/images.jpeg";
+import Logo from "../assets/img/images.png";
 import { Link } from "react-router-dom";
 import useOnline from "../utils/useOnline";
 
 const Title = () => (
-  <a href="/">
+  <a className="w-24 " href="/">
     <img className="logo" alt="logo" src={Logo}></img>
   </a>
 );
@@ -14,10 +14,10 @@ const Header = () => {
   const isOnline = useOnline();
 
   return (
-    <div className="header">
+    <div className="header flex justify-between items-center px-4 border-b-2 border-gray-200 bg-pink-50 shadow-md">
       <Title />
       <div className="nav-items">
-        <ul>
+        <ul className="flex space-x-4">
           <Link to="/">
             <li>Home</li>
           </Link>
