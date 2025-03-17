@@ -1,4 +1,6 @@
 import { IMG_CDN_URL } from "../config";
+import { useContext } from "react";
+import UserContext from "../utils/UserContext";
 
 const RestuarantCard = ({
   name,
@@ -6,6 +8,7 @@ const RestuarantCard = ({
   cuisines,
   avgRatingString,
 }) => {
+  const { user } = useContext(UserContext);
   return (
     <div className="card">
       <div className="card-img">
@@ -15,6 +18,9 @@ const RestuarantCard = ({
         <h2>{name}</h2>
         <h3>{cuisines.join(", ")}</h3>
         <h4>{avgRatingString} Stars</h4>
+        <h5 className="font-bold">
+          {user.name} - {user.email}
+        </h5>
       </div>
     </div>
   );
